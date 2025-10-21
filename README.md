@@ -1,170 +1,150 @@
-# 🪶 OracleSage — AI-Powered Scripture Based Q&A (cf_ai_oraclesage)
+# 🪶 OracleSage — AI-Powered Biblical Q&A
 
-**OracleSage** is an AI application built on **Cloudflare Workers AI** that answers questions about the Bible.  
-You can ask questions like:
+**OracleSage** is an AI application built on **Cloudflare's edge stack** that provides scripturally-grounded answers to Bible questions. It combines Workers AI with a modern React frontend for seamless biblical exploration.
 
-> ✦ Who was the mother of Moses?  
-> ✦ What does “Talitha cumi” mean?  
-> ✦ Who else did Jesus raise from the dead?
+**Live Demo**: [https://cf-ai-oraclesage.pages.dev](https://cf-ai-oraclesage.pages.dev)
 
-The AI responds conversationally and, when possible, provides relevant verse references or contextual explanations.
+## ✨ Features
 
----
+- **🤖 AI-Powered Insights** - Uses Llama 3.3 via Cloudflare Workers AI for accurate biblical responses
+- **💬 Conversational Memory** - Maintains context across questions using KV storage
+- **📖 Verse References** - Automatically detects and highlights Bible references in responses
+- **⚡ Edge Native** - Deployed globally on Cloudflare's edge network for low latency
+- **🎨 Modern UI** - Clean, responsive chat interface built with React and TypeScript
 
-## 🌟 Features
+## 🚀 Quick Start
 
-- ⚡ **LLM-Powered Knowledge** — Uses [Llama 3.3 on Workers AI](https://developers.cloudflare.com/workers-ai/models/) to interpret and answer biblical questions.  
-- 🧠 **Conversational Memory** — Session-based memory using **Durable Objects** or **KV Storage**, so follow-up questions maintain context.  
-- 💬 **Interactive Chat UI** — Simple chat interface built on **Cloudflare Pages** (React).  
-- 📖 **Verse Awareness** — Integrates with the [Bible API](https://bible-api.com/) for verse lookups and references.  
-- 🌍 **Edge-Native Performance** — Entirely powered by Cloudflare’s global edge network.
+Ask questions like:
 
----
-<!--
-## 🧱 Architecture Overview
+- "Who was the mother of Moses?"
+- "What does 'Talitha cumi' mean?"
+- "Who did Jesus raise from the dead?"
+
+## 🏗️ Architecture
+
+```bash
+
+OracleSage/
+├── frontend/                 # React + TypeScript (Cloudflare Pages)
+│   ├── src/components/      # UI source codes
+│   └── vite.config.ts       # Build configuration
+└── worker/                  # Cloudflare Worker backend
+    ├── src/
+    │   ├── index.ts         # Main worker handler
+    │   ├── services/        # AI and session services
+    │   └── types/           # TypeScript definitions
+    └── wrangler.toml        # Worker configuration
 
 ```
 
-cf_ai_oraclesage/
-├── frontend/                # Chat UI (React on Cloudflare Pages)
-│   ├── components/
-│   ├── pages/
-│   ├── utils/
-│   └── package.json
-│
-├── worker/                  # Cloudflare Worker (Backend)
-│   ├── index.ts             # Main entry (handles /ask endpoint)
-│   ├── ai.ts                # Llama 3.3 query handler
-│   ├── memory.ts            # Durable Object or KV for chat state
-│   ├── bible.ts             # Optional Bible API integration
-│   └── wrangler.toml        # Worker configuration
-│
-├── PROMPTS.md               # AI prompts used during development
-└── README.md
+## 🛠️ Tech Stack
 
-````
+| Component       | Technology                          |
+|-----------------|-------------------------------------|
+| **AI Model**    | Llama 3.3 (Workers AI)              |
+| **Backend**     | Cloudflare Workers + Hono           |
+| **Frontend**    | React + TypeScript + Vite           |
+| **Storage**     | Cloudflare KV                       |
+| **Deployment**  | Cloudflare Pages + Workers          |
+| **Styling**     | CSS Modules                         |
 
----
+## 🔧 Development
 
-## ⚙️ Setup & Development
+### Prerequisites
 
-### 1. Clone the repo
-```bash
-git clone https://github.com/yourusername/cf_ai_oraclesage.git
-cd cf_ai_oraclesage
-````
+- Node.js 18+
+- Wrangler CLI
+- Cloudflare account with Workers AI access
 
-### 2. Install dependencies
+### Local Development
 
-Each folder has its own `package.json`:
+1. **Clone and setup**:
 
 ```bash
-cd frontend && npm install
-cd ../worker && npm install
+    git clone https://github.com/yourusername/cf_ai_oraclesage.git
+    cd cf_ai_oraclesage
 ```
 
-### 3. Configure Wrangler
-
-Create a `wrangler.toml` in the `worker/` directory:
-
-```toml
-name = "cf_ai_oraclesage"
-main = "index.ts"
-compatibility_date = "2025-10-20"
-
-[ai]
-binding = "AI"
-
-[[kv_namespaces]]
-binding = "CHAT_MEMORY"
-id = "your_kv_id"
-
-[[durable_objects.bindings]]
-name = "ChatSession"
-class_name = "ChatSession"
-
-[vars]
-BIBLE_API_URL = "https://bible-api.com"
-```
-
-### 4. Run locally
-
-Start the worker:
+2.**Backend setup**:
 
 ```bash
+cd worker
+npm install
 npx wrangler dev
 ```
 
-Run the frontend:
+3. **Frontend setup**:
 
 ```bash
 cd frontend
+npm install
 npm run dev
 ```
 
-Access the app at **[http://localhost:8787](http://localhost:8787)**
+### Deployment
 
----
--->
-
-## 🧠 Example Usage
-
-**User:** What does "Talitha cumi" mean?
-**OracleSage:** “Talitha cumi” is an Aramaic phrase found in *Mark 5:41*, where Jesus said, “Little girl, arise.”
-
-**User:** Who were her parents?
-**OracleSage:** The passage doesn’t mention the girl’s parents by name, only that she was the daughter of a synagogue ruler named Jairus.
-
----
-
-## 🪄 Deployment
-
-### Deploy Worker
+**Backend**:
 
 ```bash
+cd worker
 npx wrangler deploy
 ```
 
-### Deploy Frontend
+**Frontend**:
 
-* Push your frontend to a GitHub repo.
-* Connect it to **Cloudflare Pages** → `cf_ai_oraclesage.pages.dev`.
-
----
-<!--
-## 📄 PROMPTS.md
-
-Document your prompts and ChatGPT/LLM interactions during development:
-
-```
-Prompt: "Generate a Cloudflare Workers-based AI project that answers questions about the Bible using Llama 3.3"
-Response: (include key instructions or snippets)
+```bash
+cd frontend
+npm run build
+npx wrangler pages deploy dist --project-name=oraclesage-frontend
 ```
 
----
--->
+## 📚 API
 
-## 🧰 Tech Stack
+### Ask a Question
 
-| Component  | Tech                               |
-| ---------- | ---------------------------------- |
-| LLM        | Llama 3.3 (Workers AI)             |
-| Backend    | Cloudflare Workers                 |
-| State      | Durable Objects / KV               |
-| Frontend   | React (Pages)                      |
-| Deployment | Cloudflare Pages                   |
-| Verse API  | [Bible API](https://bible-api.com) |
+```http
+POST /ask
+Content-Type: application/json
 
----
+{
+  "question": "Who was the mother of Moses?",
+  "sessionId": "optional-session-id"
+}
+```
 
-## 🛡️ License
+Response:
+
+```json
+{
+  "answer": "Moses' mother was Jochebed (Exodus 6:20)...",
+  "sessionId": "session-id",
+  "timestamp": 1700000000000
+}
+```
+
+## 🌍 Cloudflare Integration
+
+This project demonstrates several Cloudflare capabilities:
+
+- **Workers AI** for LLM inference at the edge
+- **KV** for session state management  
+- **Pages** for frontend hosting with automatic deployments
+- **Workers** for backend API logic
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
+
+## 📄 License
 
 MIT License © 2025 Precious Olusola
 
+## 🙏 Acknowledgments
+
+- Built with [Cloudflare Workers](https://workers.cloudflare.com/)
+- AI powered by [Llama 3.3](https://developers.cloudflare.com/workers-ai/models/llama-3.3/)
+- UI built with [React](https://reactjs.org/) and [Vite](https://vitejs.dev/)
+
 ---
 
-## 💬 Author
-
-**Precious Olusola**
-[GitHub: codepraycode](https://github.com/codepraycode)
-[Email: [preciousbusiness10@gmail.com](mailto:preciousbusiness10@gmail.com)]
+**Live**: [https://cf-ai-oraclesage.pages.dev](https://cf-ai-oraclesage.pages.dev) | **Source**: [GitHub Repository](https://github.com/yourusername/cf_ai_oraclesage)

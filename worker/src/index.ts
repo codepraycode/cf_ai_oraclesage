@@ -8,7 +8,7 @@ const app = new Hono<{ Bindings: Env }>();
 
 // CORS middleware
 app.use('*', cors({
-  origin: ['http://localhost:3000', 'https://oraclesage.pages.dev'],
+  origin: ['http://localhost:3000', 'https://cf-ai-oraclesage.pages.dev', "https://cf-ai-oraclesage.vercel.app"],
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['POST', 'GET', 'OPTIONS', 'DELETE'],
   exposeHeaders: ['Content-Length'],
