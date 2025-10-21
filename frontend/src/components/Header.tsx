@@ -29,7 +29,7 @@ export function Header({ onClear, messageCount }: HeaderProps) {
                     )}
 
                     <a
-                        href="https://github.com/yourusername/oraclesage"
+                        href="https://github.com/codepraycode/cf_ai_oraclesage"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="github-button"
